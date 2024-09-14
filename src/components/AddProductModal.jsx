@@ -4,12 +4,13 @@ import Search from '../icons/Search.svg';
 import Close from '../icons/Close.svg';
 import Default from '../icons/Default.svg';
 import { useFetchProducts } from '../utils/Products';
+import { useProductContext } from '../utils/ProductContext';
 
 export const AddProductModal = () => {
   const { isModalOpen, setIsModalOpen } = useModalContext();
+  const { selectedProducts, setSelectedProducts, updateSelectedProducts } = useProductContext();
   const [searchTerm, setSearchTerm] = useState('');
   const [pageNumber, setPageNumber] = useState(1);
-  const [selectedProducts, setSelectedProducts] = useState([]);
 
   const { isLoading, isError, products, hasMore } = useFetchProducts(searchTerm, pageNumber, setPageNumber);
 
@@ -31,49 +32,48 @@ export const AddProductModal = () => {
 
   // Handle product/variant selection
   const handleSelection = (productId, variantId = null) => {
-    setSelectedProducts((prevState) => {
-      const updatedSelection = [...prevState];
-      const productIndex = updatedSelection.findIndex((p) => p.id === productId);
+    const updatedSelection = structuredClone(selectedProducts || []);
+    const productIndex = updatedSelection.findIndex((p) => p.id === productId);
 
-      if (productIndex === -1) {
-        // Product not in selection, add it
-        const productToAdd = { ...products.find((p) => p.id === productId) };
-        if (variantId) {
-          productToAdd.variants = productToAdd.variants.filter((v) => v.id === variantId);
-        }
-        updatedSelection.push(productToAdd);
+    if (productIndex === -1) {
+      // Product not in selection, add it
+      const productToAdd = { ...products.find((p) => p.id === productId) };
+      if (variantId) {
+        productToAdd.variants = productToAdd.variants.filter((v) => v.id === variantId);
+      }
+      updatedSelection.push(productToAdd);
+    } else {
+      // Product already in selection
+      if (variantId === null) {
+        // Clicked on product checkbox, remove the entire product
+        updatedSelection.splice(productIndex, 1);
       } else {
-        // Product already in selection
-        if (variantId === null) {
-          // Clicked on product checkbox, remove the entire product
-          updatedSelection.splice(productIndex, 1);
+        // Clicked on variant checkbox
+        const variantIndex = updatedSelection[productIndex].variants.findIndex((v) => v.id === variantId);
+        if (variantIndex === -1) {
+          // Variant not in selection, add it
+          const variantToAdd = products.find((p) => p.id === productId).variants.find((v) => v.id === variantId);
+          updatedSelection[productIndex].variants.push(variantToAdd);
         } else {
-          // Clicked on variant checkbox
-          const variantIndex = updatedSelection[productIndex].variants.findIndex((v) => v.id === variantId);
-          if (variantIndex === -1) {
-            // Variant not in selection, add it
-            const variantToAdd = products.find((p) => p.id === productId).variants.find((v) => v.id === variantId);
-            updatedSelection[productIndex].variants.push(variantToAdd);
-          } else {
-            // Variant in selection, remove it
-            updatedSelection[productIndex].variants.splice(variantIndex, 1);
-            if (updatedSelection[productIndex].variants.length === 0) {
-              updatedSelection.splice(productIndex, 1);
-            }
+          // Variant in selection, remove it
+          updatedSelection[productIndex].variants.splice(variantIndex, 1);
+          if (updatedSelection[productIndex].variants.length === 0) {
+            updatedSelection.splice(productIndex, 1);
           }
         }
       }
-      return updatedSelection;
-    });
+    }
+
+    setSelectedProducts(updatedSelection);
   };
 
   const isProductSelected = (productId) => {
-    return selectedProducts.some((p) => p.id === productId);
+    return selectedProducts?.some((p) => p.id === productId) ?? false;
   };
 
   const isVariantSelected = (productId, variantId) => {
-    const product = selectedProducts.find((p) => p.id === productId);
-    return product && product.variants.some((v) => v.id === variantId);
+    const product = selectedProducts?.find((p) => p.id === productId);
+    return product?.variants?.some((v) => v.id === variantId) ?? false;
   };
 
   return (
@@ -119,13 +119,12 @@ export const AddProductModal = () => {
                     onChange={() => handleSelection(product.id)}
                   />
                   <div className='flex justify-between w-full'>
-                    {/* <img className="w-[50px] h-[50px]" src={product.image.src} onError={} alt={product.title} /> */}
                     <img
                       className="w-[40px] h-[40px]"
-                      src={product.image?.src || Default} // Fallback in case `product.image.src` is undefined
+                      src={product.image?.src || Default}
                       onError={(e) => {
-                        e.target.onerror = null; // Prevent infinite loop in case the fallback image also fails
-                        e.target.src = Default; // Set default image
+                        e.target.onerror = null;
+                        e.target.src = Default;
                       }}
                       alt={product.title || 'Default Product'}
                     />
@@ -147,7 +146,8 @@ export const AddProductModal = () => {
                         />
                         <div className='flex justify-between flex-1 pr-2'>
                           <span>
-                          {variant.title} - </span>
+                            {variant.title} - 
+                          </span>
                           <span>₹{variant.price}</span>
                         </div>
                       </div>
@@ -170,7 +170,9 @@ export const AddProductModal = () => {
           >
             Cancel
           </button>
-          <button className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
+          <button className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600" 
+            onClick={() => {updateSelectedProducts(); setIsModalOpen(false)}}
+          >
             Add Products
           </button>
         </div>
