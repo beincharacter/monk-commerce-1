@@ -1,12 +1,14 @@
 import { useState } from 'react';
 import DragHandle from '../icons/DragHandle.svg';
 import Close from '../icons/Close.svg';
+import { useProductContext } from '../utils/ProductContext';
 
-export const Varient = ({ parentId, id, remove, title }) => {
+export const Varient = ({ parentId, id, discount='20', remove, title }) => {
     const [showDiscount, setShowDiscount] = useState(false);
-    const [discountType, setDiscountType] = useState('Flat OFF')
+    const [discountType, setDiscountType] = useState('flat off')
     const [showDiscountValues, setshowDiscountValues] = useState(false)
-    const [discount, setDiscount] = useState(20);
+    // const [discount, setDiscount] = useState(20);
+    const { products, setProducts } = useProductContext();
 
     return (
         <>
@@ -32,16 +34,16 @@ export const Varient = ({ parentId, id, remove, title }) => {
                                     type="number"
                                     value={discount}
                                     onChange={(e) => {
-                                        const updatedProducts = products.map(
-                                            (product) =>
-                                                product.id === id
-                                                    ? {
-                                                        ...product,
-                                                        discount: e.target.value,
-                                                    }
-                                                    : product
-                                        );
-                                        setProducts(updatedProducts);
+                                        const updatedProducts = products.map(product => ({
+                                            ...product,
+                                            variants: product.variants.map(variant =>
+                                              variant.id === id
+                                                ? { ...variant, discount: e.target.value }
+                                                : variant
+                                            )
+                                          }));
+                                          
+                                          setProducts(updatedProducts);
                                     }}
                                 />
 

@@ -179,7 +179,7 @@ export const HomePage = () => {
                                                                                                     parentId={id}
                                                                                                     id={v.id}
                                                                                                     type={v.type}
-                                                                                                    value={v.value}
+                                                                                                    discount={v.discount}
                                                                                                     title={v.title}
                                                                                                     price={v.price}
                                                                                                     remove={removeVarient}

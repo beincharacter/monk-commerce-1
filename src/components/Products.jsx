@@ -3,12 +3,14 @@ import DragHandle from '../icons/DragHandle.svg';
 import Edit from '../icons/Edit.svg';
 import Close from '../icons/Close.svg';
 import { useModalContext } from '../utils/ModalContext';
+import { useProductContext } from '../utils/ProductContext';
 
 export const Products = ({ id, name, index, discount="20", remove }) => {
     const [showDiscount, setShowDiscount] = useState(false);
-    const [discountType, setDiscountType] = useState('Flat OFF')
+    const [discountType, setDiscountType] = useState('flat off')
     const [showDiscountValues, setshowDiscountValues] = useState(false)
     const { modalStateTrigger } = useModalContext();
+    const { products, setProducts } = useProductContext();
 
     return (
         <>
@@ -37,7 +39,7 @@ export const Products = ({ id, name, index, discount="20", remove }) => {
                                     onChange={(e) => {
                                         const updatedProducts = products.map(
                                             (product) =>
-                                                product.id === id
+                                                product.id == id
                                                     ? {
                                                         ...product,
                                                         discount: e.target.value,
