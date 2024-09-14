@@ -22,7 +22,7 @@ export const Products = ({ id, name, index, discount="20", remove }) => {
 
             <div className='flex w-full gap-4 h-[40px]'>
                 {/* handle */}
-                <img src={DragHandle} />
+                <img src={DragHandle} alt='draghandle' />
 
                 <span className='flex items-center'>{index+1}.</span>
 
@@ -44,7 +44,7 @@ export const Products = ({ id, name, index, discount="20", remove }) => {
                                     onChange={(e) => {
                                         const updatedProducts = products.map(
                                             (product) =>
-                                                product.id == id
+                                                product.id === id
                                                     ? {
                                                         ...product,
                                                         discount: e.target.value,

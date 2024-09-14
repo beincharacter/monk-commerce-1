@@ -17,7 +17,7 @@ export const Varient = ({ parentId, id, discount='20', remove, title }) => {
                 <div className='flex gap-4 w-full h-full'>
 
                     {/* handle */}
-                    <img src={DragHandle} />
+                    <img src={DragHandle} alt='draghandle' />
 
                     {/* Product Title */} 
                     <div className='flex flex-5-8 h-full items-center justify-between pl-4 pr-4 bg-white shadow-c border border-c rounded-full'>
