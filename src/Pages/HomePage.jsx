@@ -43,7 +43,6 @@ export const HomePage = () => {
         }
 
         setIsDragging(false);
-        draggingItem = false;
     };
 
     const handleOnDragStart = (start) => {
@@ -226,6 +225,7 @@ export const HomePage = () => {
                 >
                     Add Products
                 </button>
+                {console.log({draggingItem})}
             </div>
 
             <AddProductModal />

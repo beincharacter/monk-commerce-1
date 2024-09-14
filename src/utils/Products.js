@@ -10,7 +10,7 @@ export const useFetchProducts = (searchTerm, pageNumber, setPageNumber) => {
   useEffect(() => {
     setProducts([]);
     setPageNumber(1);
-  }, [searchTerm]);
+  }, [searchTerm, setPageNumber]);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -36,7 +36,7 @@ export const useFetchProducts = (searchTerm, pageNumber, setPageNumber) => {
     };
 
     fetchProducts();
-  }, [searchTerm, pageNumber]);
+  }, [searchTerm, pageNumber, setPageNumber]);
 
   return { isLoading, isError, products, hasMore };
 };
