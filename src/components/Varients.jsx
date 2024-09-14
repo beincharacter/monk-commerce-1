@@ -2,7 +2,7 @@ import { useState } from 'react';
 import DragHandle from '../icons/DragHandle.svg';
 import Close from '../icons/Close.svg';
 
-export const Varient = ({ parentId, id, type, value, remove }) => {
+export const Varient = ({ parentId, id, remove, title }) => {
     const [showDiscount, setShowDiscount] = useState(false);
     const [discountType, setDiscountType] = useState('Flat OFF')
     const [showDiscountValues, setshowDiscountValues] = useState(false)
@@ -11,22 +11,22 @@ export const Varient = ({ parentId, id, type, value, remove }) => {
     return (
         <>
 
-            <div className='flex gap-4 w-5/6 h-[40px]'>
+            <div className='flex gap-4 w-5/6 h-[40px] rounded-full'>
                 <div className='flex gap-4 w-full h-full'>
 
                     {/* handle */}
                     <img src={DragHandle} />
 
-                    {/* Product Title */}
-                    <div className='flex flex-5-8 justify-between bg-slate-500 h-full items-center px-4'>
-                        <span>{type}</span>
+                    {/* Product Title */} 
+                    <div className='flex flex-5-8 h-full items-center justify-between pl-4 pr-4 bg-white shadow-c border border-c rounded-full'>
+                        <span>{title || 'No title'}</span>
                     </div>
 
                     {/* Discount Input or Display */}
                     <div className='flex-2'>
                         {showDiscount ? (
                             <div className='flex items-center justify-between gap-4 relative'>
-                                <input className='w-1/2 p-1 flex-1 border-none outline-none'
+                                <input className='w-1/2 p-1 flex-1 border-t outline-none bg-white shadow-md border border-t-c  pl-4 rounded-full'
                                     min={0}
                                     max={100}
                                     type="number"
@@ -45,17 +45,17 @@ export const Varient = ({ parentId, id, type, value, remove }) => {
                                     }}
                                 />
 
-                                <div className='flex text-center w-1/2 bg-red  border border-black p-2'>
+                                <div className='flex text-center justify-center w-1/2 bg-red border-black p-2 bg-white shadow-c border border-c text-slate-900 rounded-full'>
                                     <div className='z-1' onClick={() => setshowDiscountValues(v => !v)}>{discountType}</div>
                                 </div>
 
                                 <div className={`absolute top-2/3 bg-white rounded-md p-1 cursor-pointer right-0 flex flex-col z-50 ${showDiscountValues ? 'flex' : 'hidden'}`}>
-                                    <div className='hover:bg-gray-400 p-1' onClick={() => {setDiscountType('Flat OFF'); setshowDiscountValues(v => !v)}}>flat off</div>
-                                    <div className='hover:bg-gray-400 p-1' onClick={() => {setDiscountType('% OFF'); setshowDiscountValues(v => !v)}}>% off</div>
+                                    <div className='hover:bg-gray-400 p-1' onClick={() => {setDiscountType('falt off'); setshowDiscountValues(v => !v)}}>flat off</div>
+                                    <div className='hover:bg-gray-400 p-1' onClick={() => {setDiscountType('% off'); setshowDiscountValues(v => !v)}}>% off</div>
                                 </div>
                             </div>
                         ) : (
-                            <button className='w-full h-[40px] border border-black p-2 cursor-pointer'
+                            <button className='w-full h-[40px] text-white font-bold bg-green-700 p-2 cursor-pointer'
                                 onClick={() => setShowDiscount(true)}
                             >
                                 Add Discount

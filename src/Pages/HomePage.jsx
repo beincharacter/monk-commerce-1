@@ -2,24 +2,16 @@ import { useState } from "react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { Varient } from "../components/Varients";
 import { Products } from "../components/Products";
+import ExpandMore from "../icons/ExpandMore.svg";
+import ExpandLess from "../icons/ExpandLess.svg";
 import { AddProductModal } from "../components/AddProductModal";
+import { useProductContext } from "../utils/ProductContext";
 
 export const HomePage = () => {
-    const [products, setProducts] = useState([
-        { id: "1", name: "Product 1", discount: 20, variants: [] },
-        { id: "2", name: "Product 2", discount: 15, variants: [
-            { id: '1', type: "Size", value: "M" },
-            { id: '2', type: "Color", value: "Red" }
-        ]},
-        { id: "3", name: "Product 3", discount: 10, variants: [] },
-        { id: "4", name: "Product 4", discount: 5, variants: [
-            { id: '1', type: "Size", value: "L" }
-        ]},
-        { id: "5", name: "Product 5", discount: 25, variants: [] }
-    ]);
     const [draggingItem, setDraggingItem] = useState(null);
-    const [isDragging, setIsDragging] = useState(false);    
-    const [isModal, setIsModal] = useState(true);
+    const [isDragging, setIsDragging] = useState(false);
+    const [expandedProducts, setExpandedProducts] = useState({});  // For toggling variants visibility
+    const { products, setProducts } = useProductContext();
 
     // Function to handle the drag end for both products and variants
     const handleOnDragEnd = (result) => {
@@ -76,6 +68,14 @@ export const HomePage = () => {
         setProducts(updatedProducts);
     };
 
+    // Toggle view for product variants
+    const toggleVariantsView = (index) => {
+        setExpandedProducts((prev) => ({
+            ...prev,
+            [index]: !prev[index],
+        }));
+    };
+
     return (
         <>
             <div
@@ -93,20 +93,9 @@ export const HomePage = () => {
                 </div>
 
                 <div
-                    className="flex"
+                    className="flex items-center text-3xl flex-col flex-1 w-full p-4 gap-2 overflow-auto rounded-lg"
                     style={{
-                        display: "flex",
                         justifyContent: products.length ? "" : "center",
-                        alignItems: "center",
-                        fontSize: "32px",
-                        flexDirection: "column",
-                        flex: 1,
-                        background: "lightblue",
-                        width: "100%",
-                        padding: "16px",
-                        gap: "16px",
-                        overflow: "auto",
-                        borderRadius: "8px",
                         border:
                             isDragging
                                 ? "2px dashed black"
@@ -124,93 +113,86 @@ export const HomePage = () => {
                                         <div
                                             {...provided.droppableProps}
                                             ref={provided.innerRef}
-                                            style={{
-                                                display: "flex",
-                                                flexDirection: "column",
-                                                gap: "16px",
-                                                width: "100%",
-                                            }}
+                                            className="flex flex-col gap-4 w-full"
                                         >
-                                            {products.map(({ id, name, discount, variants }, index) => (
-                                                <Draggable key={id} draggableId={id} index={index}>
+                                            {products.map(({ id, name, title, discount, variants }, index) => (
+                                                <Draggable key={id.toString()} draggableId={id.toString()} index={index}>
                                                     {(provided) => (
                                                         <>
                                                             <div
                                                                 ref={provided.innerRef}
                                                                 {...provided.draggableProps}
                                                                 {...provided.dragHandleProps}
+                                                                className="flex flex-col text-base gap-2 items-end rounded-lg justify-between"
                                                                 style={{
-                                                                    display: "flex",
-                                                                    flexDirection: 'column',
-                                                                    gap: "16px",
-                                                                    fontSize: "16px",
-                                                                    borderRadius: "8px",
-                                                                    alignItems: "end",
-                                                                    justifyContent: "space-between",
-                                                                    border:
-                                                                        draggingItem === index
-                                                                            ? "2px dashed black"
-                                                                            : "none",
                                                                     ...provided.draggableProps.style,
                                                                 }}
                                                             >
                                                                 <Products
                                                                     key={index}
+                                                                    index={index}
                                                                     id={id}
-                                                                    name={name}
+                                                                    name={name || title}
                                                                     discount={discount}
                                                                     remove={removeProduct}
-                                                                    updateModalState={setIsModal}
                                                                 />
+                                                                {/* View Variants toggle */}
+                                                                {variants && variants.length > 0 && (
+                                                                    <span
+                                                                        className="flex justify-center text-[#3B82F6] relative right-10 gap-1 cursor-pointer hover:text-blue-500"
+                                                                        onClick={() => toggleVariantsView(index)}
+                                                                    >
+                                                                        {expandedProducts[index] ? "Hide variants" : "View variants"} 
+                                                                        <img src={expandedProducts[index] ? ExpandLess : ExpandMore} alt="" />
+                                                                    </span>
+                                                                )}
 
-                                                                {/* Variants Drag and Drop */}
-                                                                <Droppable droppableId={`variants-${index}`} type="variants">
-                                                                    {(provided) => (
-                                                                        <div
-                                                                            {...provided.droppableProps}
-                                                                            ref={provided.innerRef}
-                                                                            style={{
-                                                                                display: "flex",
-                                                                                flexDirection: "column",
-                                                                                gap: "8px",
-                                                                                paddingLeft: "20px",
-                                                                                width: '100%'
-                                                                            }}
-                                                                        >
-                                                                            {variants.map((v, vIndex) => (
-                                                                                <Draggable
-                                                                                    key={v.id}
-                                                                                    draggableId={`${id}-${v.id}`}
-                                                                                    index={vIndex}
-                                                                                >
-                                                                                    {(provided) => (
-                                                                                        <div
-                                                                                            ref={provided.innerRef}
-                                                                                            {...provided.draggableProps}
-                                                                                            {...provided.dragHandleProps}
-                                                                                            style={{
-                                                                                                display: "flex",
-                                                                                                gap: "16px",
-                                                                                                alignItems: "center",
-                                                                                                justifyContent: 'end',
-                                                                                                ...provided.draggableProps.style,
-                                                                                            }}
-                                                                                        >
-                                                                                            <Varient
-                                                                                                parentId={id}
-                                                                                                id={v.id}
-                                                                                                type={v.type}
-                                                                                                value={v.value}
-                                                                                                remove={removeVarient}
-                                                                                            />
-                                                                                        </div>
-                                                                                    )}
-                                                                                </Draggable>
-                                                                            ))}
-                                                                            {provided.placeholder}
-                                                                        </div>
-                                                                    )}
-                                                                </Droppable>
+                                                                {/* Variants Drag and Drop, only show if expanded */}
+                                                                {expandedProducts[index] && variants && variants.length > 0 && (
+                                                                    <Droppable droppableId={`variants-${index}`} type="variants">
+                                                                        {(provided) => (
+                                                                            <div
+                                                                                {...provided.droppableProps}
+                                                                                ref={provided.innerRef}
+                                                                                className="flex flex-col gap-2 pl-5 w-full"
+                                                                            >
+                                                                                {variants.map((v, vIndex) => (
+                                                                                    <Draggable
+                                                                                        key={v.id.toString()}
+                                                                                        draggableId={`${id.toString()}-${v.id.toString()}`}
+                                                                                        index={vIndex}
+                                                                                    >
+                                                                                        {(provided) => (
+                                                                                            <div
+                                                                                                ref={provided.innerRef}
+                                                                                                {...provided.draggableProps}
+                                                                                                {...provided.dragHandleProps}
+                                                                                                style={{
+                                                                                                    display: "flex",
+                                                                                                    gap: "16px",
+                                                                                                    alignItems: "center",
+                                                                                                    justifyContent: 'end',
+                                                                                                    ...provided.draggableProps.style,
+                                                                                                }}
+                                                                                            >
+                                                                                                <Varient
+                                                                                                    parentId={id}
+                                                                                                    id={v.id}
+                                                                                                    type={v.type}
+                                                                                                    value={v.value}
+                                                                                                    title={v.title}
+                                                                                                    price={v.price}
+                                                                                                    remove={removeVarient}
+                                                                                                />
+                                                                                            </div>
+                                                                                        )}
+                                                                                    </Draggable>
+                                                                                ))}
+                                                                                {provided.placeholder}
+                                                                            </div>
+                                                                        )}
+                                                                    </Droppable>
+                                                                )}
                                                             </div>
                                                             <hr />
                                                         </>
@@ -228,12 +210,12 @@ export const HomePage = () => {
                     )}
                 </div>
 
-                <button className="p-2 border border-black px-12 self-end bg-slate-600 hover:bg-slate-500 text-white"
+                <button className="p-2 px-12 self-end border-2 border-emerald-700 bg-white hover:bg-slate-100 font-bold text-emerald-700"
                     onClick={() =>
                         setProducts([
                             ...products,
                             {
-                                id: `${products.length + 1}`,
+                                id: `${Date.now()}`, // Use Date.now() as string id
                                 name: `Product ${products.length + 1}`,
                                 discount: 0,
                                 variants: []

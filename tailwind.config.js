@@ -17,7 +17,14 @@ module.exports = {
         '8': 8,
         '9': 9,
         '10': 10,
-      }
+      },
+      boxShadow: {
+        c: '2px 2px 4px 0px #0000001A',
+      },
+      borderColor: {
+        c: 'rgba(0, 0, 0, 0.1)',
+      },
+
     },
   },
   plugins: [],
