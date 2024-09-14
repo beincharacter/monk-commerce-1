@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback } from 'react';
 import { useModalContext } from '../utils/ModalContext';
 import Search from '../icons/Search.svg';
 import Close from '../icons/Close.svg';

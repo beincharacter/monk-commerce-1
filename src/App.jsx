@@ -5,7 +5,6 @@ import { ModalProvider } from './utils/ModalContext'
 import { ProductProvider } from './utils/ProductContext'
 
 function App() {
-  const [products, setProducts] = useState([])
 
   return (
     <>

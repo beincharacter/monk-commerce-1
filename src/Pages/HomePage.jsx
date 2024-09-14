@@ -43,6 +43,7 @@ export const HomePage = () => {
         }
 
         setIsDragging(false);
+        draggingItem = false;
     };
 
     const handleOnDragStart = (start) => {

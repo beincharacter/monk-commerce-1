@@ -1,5 +1,5 @@
 import React, { createContext, useState, useContext } from "react";
-import { data } from "../assets/sampleData";
+// import { data } from "../assets/sampleData";
 
 const ProductContext = createContext();
 export const useProductContext = () => useContext(ProductContext);
@@ -39,7 +39,7 @@ export const ProductProvider = ({ children }) => {
         const newProducts = updatedSelectedProducts.filter(product => !existingProductIds.has(product.id));
 
         const filteredProducts = products.filter(
-            product => product.id.toString() != clicked
+            product => product.id.toString() !== clicked
         );
         console.log(filteredProducts);
         console.log("/////////////////////////////////////////////")
