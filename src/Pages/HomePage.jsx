@@ -6,21 +6,17 @@ import ExpandMore from "../icons/ExpandMore.svg";
 import ExpandLess from "../icons/ExpandLess.svg";
 import { AddProductModal } from "../components/AddProductModal";
 import { useProductContext } from "../utils/ProductContext";
-import { v4 as uuidv4 } from 'uuid';
 
 export const HomePage = () => {
     const [draggingItem, setDraggingItem] = useState(null);
     const [isDragging, setIsDragging] = useState(false);
-    const [expandedProducts, setExpandedProducts] = useState({});
+    const [expandedProducts, setExpandedProducts] = useState({});  // For toggling variants visibility
     const { products, setProducts } = useProductContext();
-    console.log({products});
-    console.log('-------------------------------------------------')
 
     // Function to handle the drag end for both products and variants
     const handleOnDragEnd = (result) => {
         setDraggingItem(null);
         const { source, destination, type } = result;
-        console.log({ source, destination, type })
 
         // No destination, meaning dropped outside valid areas
         if (!destination) return;
@@ -72,6 +68,7 @@ export const HomePage = () => {
         setProducts(updatedProducts);
     };
 
+    // Toggle view for product variants
     const toggleVariantsView = (index) => {
         setExpandedProducts((prev) => ({
             ...prev,
@@ -119,7 +116,7 @@ export const HomePage = () => {
                                             className="flex flex-col gap-4 w-full"
                                         >
                                             {products.map(({ id, name, title, discount, variants }, index) => (
-                                                <Draggable key={uuidv4()} draggableId={id} index={index}>
+                                                <Draggable key={`${id}`} draggableId={`${id}`} index={index}>
                                                     {(provided) => (
                                                         <>
                                                             <div
@@ -132,16 +129,15 @@ export const HomePage = () => {
                                                                 }}
                                                             >
                                                                 <Products
-                                                                    key={uuidv4()}
+                                                                    key={index}
                                                                     index={index}
                                                                     id={id}
-                                                                    name={name || title}
+                                                                    name={title}
                                                                     discount={discount}
                                                                     remove={removeProduct}
                                                                 />
-                                                                
                                                                 {/* View Variants toggle */}
-                                                                {variants && variants.length > 0 && (
+                                                                {variants.length > 0 && (
                                                                     <span
                                                                         className="flex justify-center text-[#3B82F6] relative right-10 gap-1 cursor-pointer hover:text-blue-500"
                                                                         onClick={() => toggleVariantsView(index)}
@@ -152,7 +148,7 @@ export const HomePage = () => {
                                                                 )}
 
                                                                 {/* Variants Drag and Drop, only show if expanded */}
-                                                                {expandedProducts[index] && variants && variants.length > 0 && (
+                                                                {expandedProducts[index] && (
                                                                     <Droppable droppableId={`variants-${index}`} type="variants">
                                                                         {(provided) => (
                                                                             <div
@@ -162,8 +158,8 @@ export const HomePage = () => {
                                                                             >
                                                                                 {variants.map((v, vIndex) => (
                                                                                     <Draggable
-                                                                                        key={uuidv4()}
-                                                                                        draggableId={`${id.toString()}-${v.id.toString()}`}
+                                                                                        key={v.id.toString()}
+                                                                                        draggableId={`${id}-${v.id}`}
                                                                                         index={vIndex}
                                                                                     >
                                                                                         {(provided) => (
@@ -171,8 +167,11 @@ export const HomePage = () => {
                                                                                                 ref={provided.innerRef}
                                                                                                 {...provided.draggableProps}
                                                                                                 {...provided.dragHandleProps}
-                                                                                                className="flexx gap-4 items-center justify-end"
                                                                                                 style={{
+                                                                                                    display: "flex",
+                                                                                                    gap: "16px",
+                                                                                                    alignItems: "center",
+                                                                                                    justifyContent: 'end',
                                                                                                     ...provided.draggableProps.style,
                                                                                                 }}
                                                                                             >
@@ -216,7 +215,7 @@ export const HomePage = () => {
                         setProducts([
                             ...products,
                             {
-                                id: `${Date.now()}`,
+                                id: `${products.length + 1}`,
                                 name: `Product ${products.length + 1}`,
                                 discount: 0,
                                 variants: []
