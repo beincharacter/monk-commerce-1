@@ -10,7 +10,12 @@ export const Products = ({ id, name, index, discount="20", remove }) => {
     const [discountType, setDiscountType] = useState('flat off')
     const [showDiscountValues, setshowDiscountValues] = useState(false)
     const { modalStateTrigger } = useModalContext();
-    const { products, setProducts } = useProductContext();
+    const { products, setProducts, setClicked } = useProductContext();
+
+    const toggleModalState = (id) => {
+        modalStateTrigger(id);
+        setClicked(id);
+    }
 
     return (
         <>
@@ -24,7 +29,7 @@ export const Products = ({ id, name, index, discount="20", remove }) => {
                 {/* Product Title */}
                 <div className='flex h-full items-center justify-between pl-4 pr-4 bg-white shadow-c border border-c flex-8 rounded-md'>
                     <span>{name || 'Select Product'}</span>
-                    <img src={Edit} alt="edit" className='cursor-pointer' onClick={() => modalStateTrigger(id, true)} />
+                    <img src={Edit} alt="edit" className='cursor-pointer' onClick={() => toggleModalState(id, true)} />
                 </div>
 
                 {/* Discount Input or Display */}

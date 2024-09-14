@@ -7,6 +7,7 @@ export const useProductContext = () => useContext(ProductContext);
 export const ProductProvider = ({ children }) => {
     const [products, setProducts] = useState([]);
     const [selectedProducts, selectedProductsFromContext] = useState();
+    const [clicked, setClicked] = useState();
 
 
     const updateProducts = (newProducts) => {
@@ -36,9 +37,15 @@ export const ProductProvider = ({ children }) => {
         
         // Add only new products to `products`
         const newProducts = updatedSelectedProducts.filter(product => !existingProductIds.has(product.id));
+
+        const filteredProducts = products.filter(
+            product => product.id.toString() != clicked
+        );
+        console.log(filteredProducts);
+        console.log("/////////////////////////////////////////////")
     
         // Update the `products` state with new products
-        setProducts([...products, ...newProducts]);
+        setProducts([...filteredProducts, ...newProducts]);
     };
     
 
@@ -55,6 +62,7 @@ export const ProductProvider = ({ children }) => {
             value={{
                 products,
                 selectedProducts,
+                setClicked,
                 setProducts,
                 updateProducts,
                 setSelectedProducts,
