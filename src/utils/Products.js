@@ -18,7 +18,7 @@ export const useFetchProducts = (searchTerm, pageNumber, setPageNumber) => {
       setIsError(false);
 
       try {
-        const response = await axios.get('/task/products/search', {
+        const response = await axios.get('http://stageapi.monkcommerce.app/task/products/search', {
           params: { search: searchTerm, page: pageNumber, limit: 10 },
           headers: { 'x-api-key': '72njgfa948d9aS7gs5' },
         });
