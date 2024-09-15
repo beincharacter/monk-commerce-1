@@ -46,6 +46,7 @@ export const ProductProvider = ({ children }) => {
     
         // Update the `products` state with new products
         setProducts([...filteredProducts, ...newProducts]);
+        setSelectedProducts([]);
     };
     
 
