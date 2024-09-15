@@ -6,12 +6,14 @@ import ExpandMore from "../icons/ExpandMore.svg";
 import ExpandLess from "../icons/ExpandLess.svg";
 import { AddProductModal } from "../components/AddProductModal";
 import { useProductContext } from "../utils/ProductContext";
+import { useModalContext } from "../utils/ModalContext";
 
 export const HomePage = () => {
     const [draggingItem, setDraggingItem] = useState(null);
     const [isDragging, setIsDragging] = useState(false);
-    const [expandedProducts, setExpandedProducts] = useState({});  // For toggling variants visibility
+    const [expandedProducts, setExpandedProducts] = useState({});
     const { products, setProducts } = useProductContext();
+    const { isModalOpen } = useModalContext();
 
     // Function to handle the drag end for both products and variants
     const handleOnDragEnd = (result) => {
@@ -228,7 +230,9 @@ export const HomePage = () => {
                 {console.log({draggingItem})}
             </div>
 
-            <AddProductModal />
+            {isModalOpen && <AddProductModal />}
+
+            
         </>
     );
 };
