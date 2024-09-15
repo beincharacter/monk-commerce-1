@@ -39,7 +39,7 @@ export const useFetchProducts = (searchTerm, pageNumber, setPageNumber) => {
     if (searchTerm || pageNumber === 1) {
       fetchProducts();
     }
-  }, [fetchProducts]);
+  }, [fetchProducts, searchTerm, pageNumber]);
 
   return { isLoading, isError, products, hasMore };
 };
