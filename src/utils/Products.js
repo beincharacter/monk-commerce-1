@@ -1,13 +1,16 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useMemo } from 'react';
 
 export const useFetchProducts = (searchTerm, pageNumber, setPageNumber) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [products, setProducts] = useState([]);
   const [hasMore, setHasMore] = useState(false);
-  
-  const headers = new Headers();
-  headers.append('x-api-key', '72njgfa948d9aS7gs5');
+
+  const headers = useMemo(() => {
+    const h = new Headers();
+    h.append('x-api-key', '72njgfa948d9aS7gs5');
+    return h;
+  }, []);
 
   const resetProducts = useCallback(() => {
     setProducts([]);
