@@ -14,10 +14,10 @@ export const Varient = ({ parentId, id, discount='20', remove, title }) => {
         <>
 
             <div className='flex gap-4 w-5/6 h-[40px] rounded-full'>
-                <div className='flex gap-4 w-full h-full'>
+                <div className='flex gap-4 w-full h-full items-center'>
 
                     {/* handle */}
-                    <img src={DragHandle} alt='draghandle' />
+                    <img src={DragHandle} alt='draghandle' className='h-3/5' />
 
                     {/* Product Title */} 
                     <div className='flex flex-5-8 h-full items-center justify-between pl-4 pr-4 bg-white shadow-c border border-c rounded-full'>

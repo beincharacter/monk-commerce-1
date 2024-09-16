@@ -20,9 +20,9 @@ export const Products = ({ id, name, index, discount="20", remove }) => {
     return (
         <>
 
-            <div className='flex w-full gap-4 h-[40px]'>
+            <div className='flex w-full gap-4 h-[40px] items-center'>
                 {/* handle */}
-                <img src={DragHandle} alt='draghandle' />
+                <img src={DragHandle} alt='draghandle' className='h-3/5' />
 
                 <span className='flex items-center'>{index+1}.</span>
 
