@@ -160,6 +160,7 @@ export const AddProductModal = () => {
 
           {isLoading && <div className='flex w-full h-full justify-center items-center'>Loading...</div>}
           {isError && <div className='flex w-full h-full justify-center items-center'>Error loading products</div>}
+          {!hasMore && <div className='flex justify-center items-center'>No more products</div>}
         </div>
 
         {/* Action Buttons */}
