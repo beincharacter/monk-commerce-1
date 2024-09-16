@@ -52,7 +52,7 @@ export const useFetchProducts = (searchTerm, pageNumber, setPageNumber) => {
     } finally {
       setIsLoading(false);
     }
-  }, [searchTerm, pageNumber]);
+  }, [searchTerm, pageNumber, headers]);
 
   useEffect(() => {
     if (searchTerm || pageNumber === 1) {
