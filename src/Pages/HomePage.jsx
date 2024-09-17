@@ -44,7 +44,6 @@ export const HomePage = () => {
         }
 
         setIsDragging(false);
-        setExpandedProducts({});
     };
 
     const handleOnDragStart = (start) => {
