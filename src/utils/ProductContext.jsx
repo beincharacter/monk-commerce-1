@@ -1,12 +1,12 @@
 import React, { createContext, useState, useContext } from "react";
-import { data } from "../assets/sampleData";
+// import { data } from "../assets/sampleData";
 
 const ProductContext = createContext();
 export const useProductContext = () => useContext(ProductContext);
 
 export const ProductProvider = ({ children }) => {
-    const [products, setProducts] = useState(data);
-    const [selectedProducts, selectedProductsFromContext] = useState();
+    const [products, setProducts] = useState([]);
+    const [selectedProducts, selectedProductsFromContext] = useState([]);
     const [clicked, setClicked] = useState();
 
 
