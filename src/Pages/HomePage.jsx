@@ -15,7 +15,6 @@ export const HomePage = () => {
     const { products, setProducts } = useProductContext();
     const { isModalOpen } = useModalContext();
 
-    // Function to handle the drag end for both products and variants
     const handleOnDragEnd = (result) => {
         setDraggingItem(null);
         const { source, destination, type } = result;
@@ -45,6 +44,7 @@ export const HomePage = () => {
         }
 
         setIsDragging(false);
+        setExpandedProducts({});
     };
 
     const handleOnDragStart = (start) => {
@@ -70,7 +70,6 @@ export const HomePage = () => {
         setProducts(updatedProducts);
     };
 
-    // Toggle view for product variants
     const toggleVariantsView = (index) => {
         setExpandedProducts((prev) => ({
             ...prev,
@@ -81,18 +80,26 @@ export const HomePage = () => {
     return (
         <>
             <div
-                className="flex flex-col items-start h-full w-2/3 border border-black rounded-lg p-4 gap-4"
+                className="flex flex-col items-start h-full w-2/3 rounded-lg p-4 gap-4 border border-black bg-slate-100"
             >
                 <div
                     style={{
-                        background: "lightgreen",
                         fontSize: "24px",
                         fontWeight: "bold",
                         padding: "8px"
                     }}
                 >
-                    Admin Panel
+                    Add Products 
                 </div>
+
+                {products.length !== 0 && 
+                    <div className="flex justify-between w-full">
+                        <div className="flex-8 font-bold pl-8">Product</div>
+                        <div className="flex-2 font-bold">Discount</div>
+                    </div>
+                }
+
+                
 
                 <div
                     className="flex items-center text-3xl flex-col flex-1 w-full p-4 gap-2 overflow-auto rounded-lg"
@@ -101,7 +108,7 @@ export const HomePage = () => {
                         border:
                             isDragging
                                 ? "2px dashed black"
-                                : "1px solid black",
+                                : "",
                     }}
                 >
                     {products.length ? (
@@ -141,7 +148,7 @@ export const HomePage = () => {
                                                                 {/* View Variants toggle */}
                                                                 {variants.length > 0 && (
                                                                     <span
-                                                                        className="flex justify-center text-[#3B82F6] relative right-10 gap-1 cursor-pointer hover:text-blue-500"
+                                                                        className="flex justify-center text-[#3B82F6] relative gap-1 cursor-pointer hover:text-blue-500"
                                                                         onClick={() => toggleVariantsView(index)}
                                                                     >
                                                                         {expandedProducts[index] ? "Hide variants" : "View variants"} 
@@ -208,11 +215,11 @@ export const HomePage = () => {
                             </DragDropContext>
                         </>
                     ) : (
-                        "No Products have been selected"
+                        "Please add product from bottom right"
                     )}
                 </div>
 
-                <button className="p-2 px-12 self-end border-2 border-emerald-700 bg-white hover:bg-slate-100 font-bold text-emerald-700"
+                <button className="p-2 px-12 self-end border-2 border-emerald-700 bg-white hover:bg-slate-100 font-bold text-emerald-700 rounded-sm"
                     onClick={() =>
                         setProducts([
                             ...products,
