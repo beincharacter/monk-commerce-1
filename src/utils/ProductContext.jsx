@@ -5,7 +5,12 @@ const ProductContext = createContext();
 export const useProductContext = () => useContext(ProductContext);
 
 export const ProductProvider = ({ children }) => {
-    const [products, setProducts] = useState([]);
+    const [products, setProducts] = useState([{
+        id: `${1}`,
+        name: `Product ${1}`,
+        discount: 0,
+        variants: []
+    }]);
     const [selectedProducts, selectedProductsFromContext] = useState([]);
     const [clicked, setClicked] = useState();
 
