@@ -91,17 +91,16 @@ export const HomePage = () => {
                     Add Products 
                 </div>
 
-                {products.length !== 0 && 
+                
                     <div className="flex justify-between w-full">
                         <div className="flex-8 font-bold pl-8">Product</div>
                         <div className="flex-2 font-bold">Discount</div>
                     </div>
-                }
 
                 
 
                 <div
-                    className="flex items-center text-3xl flex-col flex-1 w-full p-4 gap-2 overflow-auto rounded-lg"
+                    className="flex items-center text-3xl flex-col w-full p-4 gap-2 overflow-auto rounded-lg"
                     style={{
                         justifyContent: products.length ? "" : "center",
                         border:
@@ -214,11 +213,11 @@ export const HomePage = () => {
                             </DragDropContext>
                         </>
                     ) : (
-                        "Please add product from bottom right"
+                        null
                     )}
                 </div>
 
-                <button className="p-2 px-12 self-end border-2 border-emerald-700 bg-white hover:bg-slate-100 font-bold text-emerald-700 rounded-sm"
+                <button className="p-2 px-12 mr-12 self-end border-2 border-emerald-700 bg-white hover:bg-slate-100 font-bold text-emerald-700 rounded-sm"
                     onClick={() =>
                         setProducts([
                             ...products,
