@@ -30,11 +30,11 @@ export const Products = ({ id, name, index, discount="20", remove }) => {
                 {/* handle */}
                 <img src={drag ? DragHandleActive : DragHandle} alt='draghandle' className='h-3/5' />
 
-                <span className='flex items-center'>{index+1}.</span>
+                <span className={`flex items-center ${drag ? 'text-black' : 'text-slate-400'}`}>{index+1}.</span>
 
                 {/* Product Title */}
                 <div className='flex h-full items-center justify-between pl-4 pr-4 bg-white custom-border flex-8 rounded-md'>
-                    <span>{name || 'Select Product'}</span>
+                    <span>{name || <span className='text-slate-400'>Select Product</span>}</span>
                     <img 
                         src={Edit} 
                         alt="edit" 
