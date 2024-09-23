@@ -58,7 +58,7 @@ export const useFetchProducts = (searchTerm, pageNumber, setPageNumber) => {
   }, [searchTerm, pageNumber, headers]);
 
   useEffect(() => {
-    if (searchTerm || pageNumber === 1) {
+    if (searchTerm || pageNumber) {
       fetchProducts();
     }
   }, [fetchProducts, searchTerm, pageNumber]);
