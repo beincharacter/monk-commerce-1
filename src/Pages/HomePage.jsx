@@ -57,17 +57,21 @@ export const HomePage = () => {
     };
 
     const removeVarient = (parentId, variantId) => {
-        const updatedProducts = products.map(product => {
+        const updatedProducts = products.reduce((acc, product) => {
             if (product.id === parentId) {
-                return {
-                    ...product,
-                    variants: product.variants.filter(variant => variant.id !== variantId),
-                };
+                const updatedVariants = product.variants.filter(variant => variant.id !== variantId);
+                if (updatedVariants.length === 0) {
+                    return acc;
+                }
+                
+                return [...acc, { ...product, variants: updatedVariants }];
             }
-            return product;
-        });
+            return [...acc, product];
+        }, []);
+    
         setProducts(updatedProducts);
     };
+    
 
     const toggleVariantsView = (index) => {
         setExpandedProducts((prev) => ({
@@ -122,7 +126,7 @@ export const HomePage = () => {
                                             ref={provided.innerRef}
                                             className="flex flex-col gap-4 w-full"
                                         >
-                                            {products.map(({ id, name, title, discount, variants }, index) => (
+                                            {products.filter(p => (Array.isArray(p.variants) && p.variants.length > 0) || p.id == 'dummmy').map(({ id, name, title, discount, variants }, index) => (
                                                 <Draggable key={`${id}`} draggableId={`${id}`} index={index}>
                                                     {(provided) => (
                                                         <>
