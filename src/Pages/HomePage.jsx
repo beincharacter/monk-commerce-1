@@ -180,6 +180,7 @@ export const HomePage = () => {
                     Add Products
                 </button>
             </div>
+            {console.log(draggingItem)}
 
             {isModalOpen && <AddProductModal />}
         </>
