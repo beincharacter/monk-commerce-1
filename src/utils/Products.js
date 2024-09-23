@@ -4,7 +4,7 @@ export const useFetchProducts = (searchTerm, pageNumber, setPageNumber) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [products, setProducts] = useState([]);
-  const [hasMore, setHasMore] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
 
   const headers = useMemo(() => {
     const h = new Headers();
