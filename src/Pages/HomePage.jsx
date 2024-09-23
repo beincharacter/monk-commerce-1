@@ -218,16 +218,28 @@ export const HomePage = () => {
                 </div>
 
                 <button className="p-2 px-12 mr-12 self-end border-2 border-emerald-700 bg-white hover:bg-slate-100 font-bold text-emerald-700 rounded-sm"
-                    onClick={() =>
-                        setProducts([
-                            ...products,
-                            {
-                                id: `${products.length + 1}`,
-                                name: `Product ${products.length + 1}`,
-                                discount: 0,
-                                variants: []
-                            },
-                        ])
+                    onClick={() => {
+
+                        const np = {
+                            id: `dummmy`,
+                            name: `Product ${products.length + 1}`,
+                            discount: 0,
+                            variants: []
+                        };
+
+                        const c = products.some(p => p.id == np.id);
+                        console.log({c})
+
+                        if (!c) {
+
+                            setProducts([
+                                ...products,
+                                np
+                            ])
+
+                        }
+
+                    }
                     }
                 >
                     Add Products

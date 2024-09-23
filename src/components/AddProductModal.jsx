@@ -1,4 +1,5 @@
 import { useState, useRef, useCallback } from 'react';
+import InfiniteScroll from 'react-infinite-scroll-component';
 import { useModalContext } from '../utils/ModalContext';
 import Search from '../icons/Search.svg';
 import Close from '../icons/CloseP.svg';
@@ -13,22 +14,6 @@ export const AddProductModal = () => {
   const [pageNumber, setPageNumber] = useState(1);
 
   const { isLoading, isError, products, hasMore } = useFetchProducts(searchTerm, pageNumber, setPageNumber);
-
-  // Infinite scrolling logic
-  const observer = useRef();
-  const lastProductElementRef = useCallback(
-    (node) => {
-      if (isLoading) return;
-      if (observer.current) observer.current.disconnect();
-      observer.current = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting && hasMore) {
-          setPageNumber((prevPageNumber) => prevPageNumber + 1);
-        }
-      });
-      if (node) observer.current.observe(node);
-    },
-    [isLoading, hasMore]
-  );
 
   // Handle product/variant selection
   const handleSelection = (productId, variantId = null) => {
@@ -76,6 +61,13 @@ export const AddProductModal = () => {
     return product?.variants?.some((v) => v.id === variantId) ?? false;
   };
 
+  // Fetch more products when reaching the bottom of the scroll
+  const fetchMoreData = () => {
+    if (hasMore) {
+      setPageNumber((prevPageNumber) => prevPageNumber + 1);
+    }
+  };
+
   return (
     <div
       className={`flex justify-center items-center absolute top-0 left-0 h-screen w-screen bg-[#000000cc] ${
@@ -96,21 +88,28 @@ export const AddProductModal = () => {
               value={searchTerm}
               type="text"
               placeholder="Search product "
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={(e) => {
+                setSearchTerm(e.target.value);
+                setPageNumber(1);
+              }}
             />
           </div>
         </div>
 
         {/* Product List */}
-        <div className="flex-1 overflow-auto py-2">
-          {/* {products.length === 0 && !isLoading && <div>No products found</div>} */}
-          {products.map((product, index) => {
-            const isLastProduct = products.length === index + 1;
-            return (
+        <div className="flex-1 overflow-auto py-2" id="scrollableDiv">
+          <InfiniteScroll
+            dataLength={products.length}
+            next={fetchMoreData}
+            hasMore={hasMore}
+            loader={<div className='flex w-full h-full justify-center items-center py-3'>Loading...</div>}
+            endMessage={<div className='flex justify-center items-center py-3'>No more products</div>}
+            scrollableTarget="scrollableDiv"
+          >
+            {products.map((product) => (
               <div
                 className="flex flex-col border-b border-b-slate-200"
                 key={product.id}
-                ref={isLastProduct ? lastProductElementRef : null}
               >
                 <div className="flex items-center gap-2 px-6 py-2">
                   <input
@@ -138,8 +137,8 @@ export const AddProductModal = () => {
                 {product?.variants?.length > 0 && (
                   <div className='flex flex-col items-end '>
                     {product.variants.map((variant) => (
-                      <div className='w-full border-b border-b-slate-200 justify-end flex'>
-                        <div className="flex items-center gap-7 mb-2 w-[90%] mt-2 py-2" key={variant.id}>
+                      <div className='w-full border-b border-b-slate-200 justify-end flex' key={variant.id}>
+                        <div className="flex items-center gap-7 mb-2 w-[90%] mt-2 py-2">
                           <input
                             type="checkbox"
                             checked={isVariantSelected(product.id, variant.id)}
@@ -166,12 +165,10 @@ export const AddProductModal = () => {
                   </div>
                 )}
               </div>
-            );
-          })}
+            ))}
+          </InfiniteScroll>
 
-          {isLoading && <div className='flex w-full h-full justify-center items-center'>Loading...</div>}
           {isError && <div className='flex w-full h-full justify-center items-center'>Error loading products</div>}
-          {!hasMore && <div className='flex justify-center items-center'>No more products</div>}
         </div>
 
         {/* Action Buttons */}
