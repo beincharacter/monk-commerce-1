@@ -126,7 +126,7 @@ export const HomePage = () => {
                                             ref={provided.innerRef}
                                             className="flex flex-col gap-4 w-full"
                                         >
-                                            {products.filter(p => (Array.isArray(p.variants) && p.variants.length > 0) || p.id == 'dummmy').map(({ id, name, title, discount, variants }, index) => (
+                                            {products.filter(p => (Array.isArray(p.variants) && p.variants.length > 0) || p.id === 'dummmy').map(({ id, name, title, discount, variants }, index) => (
                                                 <Draggable key={`${id}`} draggableId={`${id}`} index={index}>
                                                     {(provided) => (
                                                         <>

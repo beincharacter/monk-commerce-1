@@ -52,7 +52,7 @@ export const ProductProvider = ({ children }) => {
         const existingProductIds = new Set(products.map(p => p.id.toString()));
         
         // Add only new products to `updatedSelectedProducts`
-        const newProducts = updatedSelectedProducts.filter(product => !existingProductIds.has(product.id));
+        const newProducts = updatedSelectedProducts.filter(product => !existingProductIds.has(product.id) || (product.id === products[clickedProductIndex].id));
     
         // Create a new products array without the clicked product
         const updatedProducts = [...products];

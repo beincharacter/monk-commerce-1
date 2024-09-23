@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from 'react';
+import { useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { useModalContext } from '../utils/ModalContext';
 import Search from '../icons/Search.svg';
@@ -13,7 +13,7 @@ export const AddProductModal = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [pageNumber, setPageNumber] = useState(1);
 
-  const { isLoading, isError, products, hasMore } = useFetchProducts(searchTerm, pageNumber, setPageNumber);
+  const { isError, products, hasMore } = useFetchProducts(searchTerm, pageNumber, setPageNumber);
 
   // Handle product/variant selection
   const handleSelection = (productId, variantId = null) => {
