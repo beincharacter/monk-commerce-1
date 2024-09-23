@@ -231,7 +231,7 @@ export const HomePage = () => {
                             variants: []
                         };
 
-                        const c = products.some(p => p.id == np.id);
+                        const c = products.some(p => p.id === np.id);
                         console.log({c})
 
                         if (!c) {
