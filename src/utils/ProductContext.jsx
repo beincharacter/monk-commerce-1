@@ -6,7 +6,7 @@ export const useProductContext = () => useContext(ProductContext);
 
 export const ProductProvider = ({ children }) => {
     const [products, setProducts] = useState([{
-        id: `${1}`,
+        id: `dummmy`,
         name: `Product ${1}`,
         discount: 0,
         variants: []
