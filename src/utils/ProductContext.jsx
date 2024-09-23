@@ -37,31 +37,32 @@ export const ProductProvider = ({ children }) => {
             id: product.id.toString(),
         }));
     
+        // Find the index of the clicked product in the products array
+        const clickedProductIndex = products.findIndex(
+            product => product.id.toString() === clicked
+        );
+    
+        if (clickedProductIndex === -1) {
+            // If clicked product is not found, return early or handle this case
+            console.error("Clicked product not found in the products array");
+            return;
+        }
+    
         // Check if a product already exists in `products` based on ID
         const existingProductIds = new Set(products.map(p => p.id.toString()));
         
-        // Add only new products to `products`
+        // Add only new products to `updatedSelectedProducts`
         const newProducts = updatedSelectedProducts.filter(product => !existingProductIds.has(product.id));
-
-        const filteredProducts = products.filter(
-            product => product.id.toString() !== clicked
-        );
-        console.log(filteredProducts);
-        console.log("/////////////////////////////////////////////")
     
-        // Update the `products` state with new products
-        setProducts([...filteredProducts, ...newProducts]);
+        // Create a new products array without the clicked product
+        const updatedProducts = [...products];
+        updatedProducts.splice(clickedProductIndex, 1, ...newProducts);
+    
+        // Update the products state with the modified products array
+        setProducts(updatedProducts);
         setSelectedProducts([]);
     };
     
-
-    // const selectedProductsFromContext = (productId) => {
-    //     setSelectedProducts((prevSelected) =>
-    //         prevSelected.includes(productId)
-    //             ? prevSelected.filter((id) => id !== productId)
-    //             : [...prevSelected, productId]
-    //     );
-    // };
 
     return (
         <ProductContext.Provider
@@ -73,7 +74,6 @@ export const ProductProvider = ({ children }) => {
                 updateProducts,
                 setSelectedProducts,
                 updateSelectedProducts
-                // selectedProductsFromContext,
             }}
         >
             {children}
