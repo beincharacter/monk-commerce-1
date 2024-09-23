@@ -102,8 +102,9 @@ export const AddProductModal = () => {
             dataLength={products.length}
             next={fetchMoreData}
             hasMore={hasMore}
+            scrollThreshold={1}
             loader={<div className='flex w-full h-full justify-center items-center py-3'>Loading...</div>}
-            endMessage={<div className='flex justify-center items-center py-3'>No more products</div>}
+            endMessage={<div className='flex justify-center items-center py-3'>No more products...</div>}
             scrollableTarget="scrollableDiv"
           >
             {products.map((product) => (
